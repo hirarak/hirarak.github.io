@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>当直可能日アンケート</title>
+    <style>
+        /* ここにCSSを追加 */
+    </style>
+</head>
+<body>
+    <h1>当直可能日アンケート</h1>
+    <form action="https://formsubmit.co/your-email@example.com" method="POST">
+        <input type="hidden" name="_subject" value="新しい当直可能日アンケート提出">
+        <input type="hidden" name="_next" value="https://your-username.github.io/thanks.html">
+
+        <label for="name">氏名：</label>
+        <input type="text" id="name" name="name" required>
+
+        <label>当直可能日（カレンダーから選択）：</label>
+        <div id="calendar-container">
+            <div id="calendar-header">
+                <button type="button" id="prev-month">&lt; 前月</button>
+                <span id="current-month"></span>
+                <button type="button" id="next-month">翌月 &gt;</button>
+            </div>
+            <div id="calendar"></div>
+        </div>
+        <div class="selected-dates">
+            選択された日付: <span id="selected-dates-display"></span>
+        </div>
+        <input type="hidden" id="selected-dates" name="selected_dates">
+
+        <label for="comments">備考：</label>
+        <textarea id="comments" name="comments" rows="4"></textarea>
+
+        <input type="submit" value="送信">
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const calendar = document.getElementById('calendar');
+    const currentMonthDisplay = document.getElementById('current-month');
+    const selectedDatesDisplay = document.getElementById('selected-dates-display');
+    const selectedDatesInput = document.getElementById('selected-dates');
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
+    let selectedDates = [];
+    let currentYear, currentMonth;
+
+    function createCalendar(year, month) {
+        currentYear = year;
+        currentMonth = month;
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDay = new Date(year, month, 1).getDay();
+
+        currentMonthDisplay.textContent = `${year}年 ${month + 1}月`;
+
+        calendar.innerHTML = '';
+
+        const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
+        dayNames.forEach(day => {
+            const dayHeader = document.createElement('div');
+            dayHeader.className = 'calendar-header';
+            dayHeader.textContent = day;
+            calendar.appendChild(dayHeader);
+        });
+
+        for (let i = 0; i < firstDay; i++) {
+            calendar.appendChild(document.createElement('div'));
+        }
+
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = document.createElement('div');
+            day.className = 'calendar-day';
+            day.textContent = i;
+            const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            day.dataset.date = dateString;
+            if (selectedDates.includes(dateString)) {
+                day.classList.add('selected');
+            }
+            day.addEventListener('click', toggleDate);
+            calendar.appendChild(day);
+        }
+    }
+
+    function toggleDate(event) {
+        const date = event.target.dataset.date;
+        const index = selectedDates.indexOf(date);
+        if (index > -1) {
+            selectedDates.splice(index, 1);
+            event.target.classList.remove('selected');
+        } else {
+            selectedDates.push(date);
+            event.target.classList.add('selected');
+        }
+        updateSelectedDates();
+    }
+
+    function updateSelectedDates() {
+        selectedDates.sort();
+        selectedDatesDisplay.textContent = selectedDates.join(', ');
+        selectedDatesInput.value = JSON.stringify(selectedDates);
+    }
+
+    prevMonthButton.addEventListener('click', () => {
+        let newMonth = currentMonth - 1;
+        let newYear = currentYear;
+        if (newMonth < 0) {
+            newMonth = 11;
+            newYear--;
+        }
+        createCalendar(newYear, newMonth);
+    });
+
+    nextMonthButton.addEventListener('click', () => {
+        let newMonth = currentMonth + 1;
+        let newYear = currentYear;
+        if (newMonth > 11) {
+            newMonth = 0;
+            newYear++;
+        }
+        createCalendar(newYear, newMonth);
+    });
+
+    const today = new Date();
+    createCalendar(today.getFullYear(), today.getMonth());
+});
+    </script>
+</body>
+</html>
