@@ -221,10 +221,11 @@ button:hover {
         updateSelectedDates();
     }
 
-    function updateSelectedDates() {
+   function updateSelectedDates() {
         selectedDates.sort();
         selectedDatesDisplay.textContent = selectedDates.join(', ');
-        selectedDatesInput.value = JSON.stringify(selectedDates);
+        // カンマ区切りの文字列としてデータを保存
+        selectedDatesInput.value = selectedDates.join(',');
     }
 
     prevMonthButton.addEventListener('click', () => {
