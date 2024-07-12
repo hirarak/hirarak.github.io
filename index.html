@@ -134,32 +134,28 @@ button:hover {
 </head>
 <body>
     <h1>当直可能日アンケート</h1>
-    <form action="https://formsubmit.co/hirarak@gmail.com" method="POST">
-        <input type="hidden" name="_subject" value="新しい当直可能日アンケート提出">
-        <input type="hidden" name="_next" value="https:/hirarak.github.io/thanks.html">
+  <form id="on-call-form" action="https://formsubmit.co/hirarak@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="新しい当直可能日アンケート提出">
+    <input type="hidden" name="_next" value="https://hirarak.github.io/thanks.html">
+    
+    <label for="name">氏名：</label>
+    <input type="text" id="name" name="name" required>
 
-        <label for="name">氏名：</label>
-        <input type="text" id="name" name="name" required>
+    <label>当直可能日（カレンダーから選択）：</label>
+    <div id="calendar-container">
+        <!-- カレンダーのHTML構造（変更なし） -->
+    </div>
+    <div class="selected-dates">
+        選択された日付: <span id="selected-dates-display"></span>
+    </div>
+    <!-- CSV形式のデータを格納する隠しフィールド -->
+    <input type="hidden" id="csv-data" name="csv_data">
 
-        <label>当直可能日（カレンダーから選択）：</label>
-        <div id="calendar-container">
-            <div id="calendar-header">
-                <button type="button" id="prev-month">&lt; 前月</button>
-                <span id="current-month"></span>
-                <button type="button" id="next-month">翌月 &gt;</button>
-            </div>
-            <div id="calendar"></div>
-        </div>
-        <div class="selected-dates">
-            選択された日付: <span id="selected-dates-display"></span>
-        </div>
-        <input type="hidden" id="selected-dates" name="selected_dates">
+    <label for="comments">備考：</label>
+    <textarea id="comments" name="comments" rows="4"></textarea>
 
-        <label for="comments">備考：</label>
-        <textarea id="comments" name="comments" rows="4"></textarea>
-
-        <input type="submit" value="送信">
-    </form>
+    <input type="submit" value="送信">
+</form>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -221,11 +217,18 @@ button:hover {
         updateSelectedDates();
     }
 
-   function updateSelectedDates() {
+    function updateSelectedDates() {
         selectedDates.sort();
         selectedDatesDisplay.textContent = selectedDates.join(', ');
-        // カンマ区切りの文字列としてデータを保存
-        selectedDatesInput.value = selectedDates.join(',');
+        
+        // 氏名と日付を同じ行にカンマ区切りで結合
+        const name = document.getElementById('name').value;
+        const csvData = [name, ...selectedDates].join(',');
+        document.getElementById('csv-data').value = csvData;
+    }
+
+    // 氏名入力欄の変更を監視
+    document.getElementById('name').addEventListener('input', updateSelectedDates);
     }
 
     prevMonthButton.addEventListener('click', () => {
