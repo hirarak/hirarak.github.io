@@ -5,7 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>当直可能日アンケート</title>
     <style>
-        /* ここにCSSを追加 */
+       body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+#calendar-container {
+    margin-bottom: 20px;
+}
+
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendar-header,
+.calendar-day {
+    text-align: center;
+    padding: 10px;
+    background-color: #ecf0f1;
+    border-radius: 4px;
+}
+
+.calendar-header {
+    font-weight: bold;
+    background-color: #3498db;
+    color: white;
+}
+
+.calendar-day {
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    background-color: #bdc3c7;
+}
+
+.calendar-day.selected {
+    background-color: #2ecc71;
+    color: white;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.selected-dates {
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    #calendar {
+        font-size: 14px;
+    }
+    
+    .calendar-day {
+        padding: 5px;
+    }
+}
     </style>
 </head>
 <body>
